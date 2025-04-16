@@ -1,0 +1,46 @@
+<div aria-live="assertive" class="toast-container">
+  <div class="toast-viewport">
+    @for (toast of toastService.toasts(); track toast.id) {
+      <div
+        class="toast"
+        [class.toast-default]="toast.variant === 'default'"
+        [class.toast-destructive]="toast.variant === 'destructive'"
+        [class.toast-success]="toast.variant === 'success'"
+        role="alert"
+        aria-atomic="true"
+      >
+        <div class="toast-content">
+          <div class="toast-header">
+            <h3 class="toast-title">{{ toast.title }}</h3>
+            <app-button
+              variant="ghost"
+              size="icon"
+              (buttonClick)="toastService.dismiss(toast.id)"
+              aria-label="Fechar"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </app-button>
+          </div>
+          @if (toast.description) {
+            <div class="toast-description">
+              {{ toast.description }}
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

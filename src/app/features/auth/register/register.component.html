@@ -1,0 +1,75 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Cadastro</h1>
+      <p>Crie sua conta para acessar o sistema</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <app-input
+          formControlName="name"
+          label="Nome"
+          type="text"
+          placeholder="Digite seu nome completo"
+          [required]="true"
+          [invalid]="isFieldInvalid('name')"
+          [errorMessage]="getFieldErrorMessage('name')"
+        ></app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input
+          formControlName="email"
+          label="E-mail"
+          type="email"
+          placeholder="Digite seu e-mail"
+          [required]="true"
+          [invalid]="isFieldInvalid('email')"
+          [errorMessage]="getFieldErrorMessage('email')"
+        ></app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input
+          formControlName="password"
+          label="Senha"
+          type="password"
+          placeholder="Digite sua senha"
+          [required]="true"
+          [invalid]="isFieldInvalid('password')"
+          [errorMessage]="getFieldErrorMessage('password')"
+        ></app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input
+          formControlName="confirmPassword"
+          label="Confirmar Senha"
+          type="password"
+          placeholder="Confirme sua senha"
+          [required]="true"
+          [invalid]="isFieldInvalid('confirmPassword')"
+          [errorMessage]="getFieldErrorMessage('confirmPassword')"
+        ></app-input>
+      </div>
+
+      <div class="form-actions">
+        <app-button
+          type="submit"
+          [loading]="userService.loading()"
+          [disabled]="registerForm.invalid"
+        >
+          Cadastrar
+        </app-button>
+      </div>
+    </form>
+
+    <div class="auth-footer">
+      <p>
+        Já tem uma conta?
+        <a routerLink="/auth/login">Faça login</a>
+      </p>
+    </div>
+  </div>
+</div>
