@@ -1,4 +1,10 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000',
+  apiUrl: 'https://api.nameempresa.com/api/v1',
+  mockAuth: true, // Use mock authentication service in development
+  keycloak: {
+    url: 'https://keycloak.nameempresa.com/auth',
+    realm: 'nameempresa',
+    clientId: 'nameempresa-frontend'
+  }
 };
