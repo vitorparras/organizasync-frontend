@@ -1,0 +1,96 @@
+<aside class="sidebar" [class.open]="isOpen">
+  <div class="sidebar-header">
+    <h1 class="app-title">{{ 'app.title' | translate }}</h1>
+    <button class="close-btn" (click)="toggleSidebar.emit()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  
+  <div class="sidebar-user">
+    <div class="user-avatar">
+      <i class="material-icons">account_circle</i>
+    </div>
+    <div class="user-info" *ngIf="currentUser$ | async as user">
+      <h3 class="user-name">{{ user.name }}</h3>
+      <p class="user-email">{{ user.email }}</p>
+    </div>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li *ngFor="let item of menuItems" class="nav-item">
+        <!-- Menu item with children (submenu) -->
+        <div *ngIf="item.children?.length" class="nav-item-wrapper">
+          <button 
+            class="nav-link has-children" 
+            [class.active]="hasActiveChild(item.children) || item.expanded"
+            (click)="toggleMenuItem(item)"
+          >
+            <i class="material-icons nav-icon">{{ item.icon }}</i>
+            <span class="nav-label">{{ item.label | translate }}</span>
+            <i class="material-icons expand-icon">{{ item.expanded ? 'expand_less' : 'expand_more' }}</i>
+          </button>
+          
+          <!-- Submenu -->
+          <ul class="sub-menu" *ngIf="item.expanded">
+            <li *ngFor="let child of item.children" class="sub-nav-item">
+              <a 
+                [routerLink]="child.route" 
+                [class.active]="isActive(child.route)"
+                class="sub-nav-link"
+              >
+                <i class="material-icons nav-icon">{{ child.icon }}</i>
+                <span class="nav-label">{{ child.label | translate }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Regular menu item without children -->
+        <a 
+          *ngIf="!item.children?.length"
+          [routerLink]="item.route" 
+          [class.active]="isActive(item.route)"
+          class="nav-link"
+        >
+          <i class="material-icons nav-icon">{{ item.icon }}</i>
+          <span class="nav-label">{{ item.label | translate }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="sidebar-footer">
+    <div class="settings-row">
+      <div class="setting">
+        <span class="setting-label">{{ 'dashboard.theme' | translate }}</span>
+        <app-theme-toggle></app-theme-toggle>
+      </div>
+      
+      <div class="setting">
+        <span class="setting-label">{{ 'dashboard.language' | translate }}</span>
+        <div class="language-toggle">
+          <button 
+            (click)="changeLanguage('pt-BR')" 
+            class="language-btn" 
+            [class.active]="translateService.currentLang === 'pt-BR'"
+          >
+            PT
+          </button>
+          <button 
+            (click)="changeLanguage('en')" 
+            class="language-btn" 
+            [class.active]="translateService.currentLang === 'en'"
+          >
+            EN
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <button (click)="logout()" class="logout-button">
+      <i class="material-icons">exit_to_app</i>
+      <span>{{ 'auth.logout' | translate }}</span>
+    </button>
+  </div>
+</aside>

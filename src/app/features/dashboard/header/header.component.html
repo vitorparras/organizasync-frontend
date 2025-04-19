@@ -1,0 +1,39 @@
+<header class="header">
+  <div class="header-left">
+    <button class="sidebar-toggle" (click)="onToggleSidebar()" aria-label="Toggle sidebar">
+      <i class="material-icons">{{ isSidebarOpen ? 'menu_open' : 'menu' }}</i>
+    </button>
+    
+    <div class="header-brand">
+      <h1 class="brand-title">{{ 'app.name' | translate }}</h1>
+    </div>
+  </div>
+  
+  <div class="header-right">
+    <app-theme-toggle></app-theme-toggle>
+    
+    <div class="user-dropdown">
+      <button class="user-dropdown-toggle">
+        <i class="material-icons">account_circle</i>
+        <span *ngIf="currentUser$ | async as user" class="user-name">{{ user.name }}</span>
+        <i class="material-icons dropdown-arrow">arrow_drop_down</i>
+      </button>
+      
+      <div class="dropdown-menu">
+        <a routerLink="/profile" class="dropdown-item">
+          <i class="material-icons">person</i>
+          <span>{{ 'dashboard.profile' | translate }}</span>
+        </a>
+        <a routerLink="/settings" class="dropdown-item">
+          <i class="material-icons">settings</i>
+          <span>{{ 'dashboard.settings' | translate }}</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <button (click)="logout()" class="dropdown-item">
+          <i class="material-icons">exit_to_app</i>
+          <span>{{ 'auth.logout' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

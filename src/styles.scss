@@ -1,68 +1,331 @@
-@import './app/shared/themes/variables.scss';
+// Theme variables and configuration
+:root, body.theme-light {
+  // Light theme variables
+  --primary-color: #3f51b5;
+  --primary-color-rgb: 63, 81, 181;
+  --primary-light: #757de8;
+  --primary-dark: #002984;
+  --primary-color-hover: #303f9f;
+  
+  --accent-color: #ff4081;
+  --accent-color-rgb: 255, 64, 129;
+  --accent-light: #ff79b0;
+  --accent-dark: #c60055;
+  
+  --text-color: #333333;
+  --text-secondary: #757575;
+  --background: #f5f5f5;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --border-color: #e0e0e0;
+  
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+  
+  --error-color: #f44336;
+  --error-color-rgb: 244, 67, 54;
+  --success-color: #4caf50;
+  --success-color-rgb: 76, 175, 80;
+  --warning-color: #ff9800;
+  --warning-color-rgb: 255, 152, 0;
+  --info-color: #2196f3;
+  --info-color-rgb: 33, 150, 243;
+}
 
-/* Reset básico */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+// Dark theme variables
+body.theme-dark {
+  --primary-color: #5c6bc0;
+  --primary-color-rgb: 92, 107, 192;
+  --primary-light: #8e99f3;
+  --primary-dark: #26418f;
+  --primary-color-hover: #3949ab;
+  
+  --accent-color: #ff4081;
+  --accent-color-rgb: 255, 64, 129;
+  --accent-light: #ff79b0;
+  --accent-dark: #c60055;
+  
+  --text-color: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --background: #121212;
+  --card-bg: #1e1e1e;
+  --input-bg: #2c2c2c;
+  --border-color: #333333;
+  
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.4);
+  
+  --error-color: #ef5350;
+  --error-color-rgb: 239, 83, 80;
+  --success-color: #66bb6a;
+  --success-color-rgb: 102, 187, 106;
+  --warning-color: #ffb74d;
+  --warning-color-rgb: 255, 183, 77;
+  --info-color: #42a5f5;
+  --info-color-rgb: 66, 165, 245;
+}
+
+// Reset and base styles
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   height: 100%;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-    'Helvetica Neue', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 16px;
   line-height: 1.5;
+  color: var(--text-color);
   background-color: var(--background);
-  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Estilos de acessibilidade */
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+body {
+  overflow-x: hidden;
 }
 
-/* Estilos para links */
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.1rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
 a {
-  color: var(--primary);
+  color: var(--primary-color);
   text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
 
   &:hover {
-    text-decoration: underline;
+    color: var(--primary-light);
   }
 }
 
-/* Estilos para cabeçalhos */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 0.5em;
+// Forms
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-/* Estilos para parágrafos */
-p {
-  margin-bottom: 1em;
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
-/* Utilitários */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+  }
+}
+
+// Buttons
+button, .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
+  border: none;
+  outline: none;
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+
+  &:hover:not(:disabled) {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+  }
+}
+
+.btn-danger {
+  background-color: var(--error-color);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #d32f2f; /* Darker shade of error color */
+  }
+}
+
+// Cards
+.card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Alerts and notifications
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+
+  &-error {
+    background-color: rgba(var(--error-color-rgb), 0.1);
+    border-left: 4px solid var(--error-color);
+    color: var(--error-color);
+  }
+
+  &-success {
+    background-color: rgba(var(--success-color-rgb), 0.1);
+    border-left: 4px solid var(--success-color);
+    color: var(--success-color);
+  }
+
+  &-warning {
+    background-color: rgba(var(--warning-color-rgb), 0.1);
+    border-left: 4px solid var(--warning-color);
+    color: var(--warning-color);
+  }
+
+  &-info {
+    background-color: rgba(var(--info-color-rgb), 0.1);
+    border-left: 4px solid var(--info-color);
+    color: var(--info-color);
+  }
+}
+
+// Utilities
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 2rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+// Material icons
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
   white-space: nowrap;
-  border-width: 0;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Responsive utilities
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
 }

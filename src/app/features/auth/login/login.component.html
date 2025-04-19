@@ -1,51 +1,74 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <h1>Login</h1>
-      <p>Entre com suas credenciais para acessar o sistema</p>
+<div class="login-container">
+  <div class="login-card">
+    <div class="theme-toggle-container">
+      <app-theme-toggle></app-theme-toggle>
     </div>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
-      <div class="form-group">
-        <app-input
-          formControlName="email"
-          label="E-mail"
-          type="email"
-          placeholder="Digite seu e-mail"
-          [required]="true"
-          [invalid]="isFieldInvalid('email')"
-          [errorMessage]="getFieldErrorMessage('email')"
-        ></app-input>
+    
+    <div class="language-toggle">
+      <button (click)="changeLanguage('pt-BR')" class="language-btn" [class.active]="translateService.currentLang === 'pt-BR'">PT</button>
+      <button (click)="changeLanguage('en')" class="language-btn" [class.active]="translateService.currentLang === 'en'">EN</button>
+    </div>
+    
+    <div class="login-header">
+      <h1>{{ 'app.name' | translate }}</h1>
+      <p>{{ 'auth.login' | translate }}</p>
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="alert alert-error" *ngIf="loginError">
+        {{ loginError }}
       </div>
-
+      
       <div class="form-group">
-        <app-input
-          formControlName="password"
-          label="Senha"
-          type="password"
-          placeholder="Digite sua senha"
-          [required]="true"
-          [invalid]="isFieldInvalid('password')"
-          [errorMessage]="getFieldErrorMessage('password')"
-        ></app-input>
-      </div>
-
-      <div class="form-actions">
-        <app-button
-          type="submit"
-          [loading]="authService.authState().isLoading"
-          [disabled]="loginForm.invalid"
+        <label for="email">{{ 'auth.email' | translate }}</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          [placeholder]="'auth.email' | translate"
+          [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         >
-          Entrar
-        </app-button>
+        <div class="form-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">
+            {{ 'validation.required' | translate }}
+          </span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">
+            {{ 'validation.email' | translate }}
+          </span>
+        </div>
       </div>
+      
+      <div class="form-group">
+        <label for="password">{{ 'auth.password' | translate }}</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          [placeholder]="'auth.password' | translate"
+          [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        >
+        <div class="form-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">
+            {{ 'validation.required' | translate }}
+          </span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            {{ 'validation.minLength' | translate: { count: 8 } }}
+          </span>
+        </div>
+      </div>
+      
+      <div class="form-group forgot-password">
+        <a href="#">{{ 'auth.forgotPassword' | translate }}</a>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="btn btn-primary w-100" 
+        [disabled]="isLoading"
+      >
+        <span *ngIf="isLoading" class="spinner-inline"></span>
+        {{ 'auth.login' | translate }}
+      </button>
     </form>
-
-    <div class="auth-footer">
-      <p>
-        Não tem uma conta?
-        <a routerLink="/auth/register">Cadastre-se</a>
-      </p>
-    </div>
   </div>
 </div>

@@ -1,0 +1,7 @@
+<button 
+  class="theme-toggle" 
+  (click)="toggleTheme()" 
+  [attr.aria-label]="((currentTheme$ | async) === 'light' ? 'dashboard.darkTheme' : 'dashboard.lightTheme') | translate"
+>
+  <i class="material-icons">{{ (currentTheme$ | async) === 'light' ? 'dark_mode' : 'light_mode' }}</i>
+</button>

@@ -1,0 +1,45 @@
+<div class="home-container">
+  <app-page-header [title]="'dashboard.home'"></app-page-header>
+  
+  <div class="welcome-card">
+    <h2>{{ 'dashboard.welcome' | translate }}</h2>
+    <p *ngIf="currentUser">{{ 'dashboard.welcome' | translate }}, {{ currentUser.name }}!</p>
+  </div>
+  
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="material-icons">people</i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ 'user.management' | translate }}</h3>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="material-icons">bar_chart</i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ 'dashboard.reports' | translate }}</h3>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="material-icons">settings</i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ 'dashboard.settings' | translate }}</h3>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="placeholder-section">
+    <h3>{{ 'dashboard.home' | translate }}</h3>
+    <p>{{ 'dashboard.noData' | translate }}</p>
+  </div>
+</div>

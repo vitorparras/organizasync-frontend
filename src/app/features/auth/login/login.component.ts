@@ -1,75 +1,85 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '@core/application/auth/auth.service';
-import { ButtonComponent } from '@shared/ui/button/button.component';
-import { InputComponent } from '@shared/ui/input/input.component';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { KeycloakService } from 'keycloak-angular';
+import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, ButtonComponent, InputComponent],
+  imports: [
+    CommonModule, 
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ThemeToggleComponent
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  private fb = inject(FormBuilder);
-  protected authService = inject(AuthService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-
-  protected loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  });
-
-  protected isFieldInvalid(field: string): boolean {
-    const control = this.loginForm.get(field);
-    return !!control && control.invalid && (control.dirty || control.touched);
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  isLoading = false;
+  loginError = '';
+  
+  constructor(
+    private formBuilder: FormBuilder,
+    private keycloakService: KeycloakService,
+    public translateService: TranslateService
+  ) { }
+  
+  ngOnInit(): void {
+    // Check if already authenticated
+    const isLoggedIn = this.keycloakService.isLoggedIn();
+    if (isLoggedIn) {
+      this.keycloakService.loadUserProfile().then(() => {
+        window.location.href = '/';
+      });
+    }
+    
+    // Initialize form
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
+    });
   }
-
-  protected getFieldErrorMessage(field: string): string {
-    const control = this.loginForm.get(field);
-
-    if (!control || !control.errors) {
-      return '';
-    }
-
-    if (field === 'email') {
-      if (control.errors['required']) {
-        return 'O e-mail é obrigatório';
-      }
-      if (control.errors['email']) {
-        return 'Formato de e-mail inválido';
-      }
-    }
-
-    if (field === 'password') {
-      if (control.errors['required']) {
-        return 'A senha é obrigatória';
-      }
-      if (control.errors['minlength']) {
-        return 'A senha deve ter pelo menos 6 caracteres';
-      }
-    }
-
-    return '';
-  }
-
-  protected onSubmit(): void {
+  
+  onSubmit(): void {
     if (this.loginForm.invalid) {
+      this.markFormGroupTouched(this.loginForm);
       return;
     }
-
-    const { email, password } = this.loginForm.value;
-
-    this.authService.login({ email: email!, password: password! }).subscribe(success => {
-      if (success) {
-        // Redireciona para a URL de retorno ou para o dashboard
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
-        this.router.navigateByUrl(returnUrl);
+    
+    this.isLoading = true;
+    this.loginError = '';
+    
+    // Use Keycloak login
+    this.keycloakService.login({
+      redirectUri: window.location.origin
+    }).catch(error => {
+      console.error('Login error:', error);
+      this.isLoading = false;
+      this.loginError = this.translateService.instant('auth.loginFailed');
+    });
+  }
+  
+  // Helper to mark all form controls as touched
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
     });
+  }
+  
+  // Change language
+  changeLanguage(lang: string): void {
+    this.translateService.use(lang);
   }
 }
